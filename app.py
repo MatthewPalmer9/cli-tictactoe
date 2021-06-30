@@ -5,10 +5,20 @@ board_values = [
     ' ', ' ', ' '
 ]
 
+current_player = ''
 player1 = ''
 player2 = ''
+winner = ''
 
-def game_board():
+# GAME STARTER
+def game_start():
+    print('\n')
+    print("Welcome to TicTacToe!")
+    board_display()
+    choose_xo()
+
+# GAME BOARD
+def board_display():
     print('\n')
     print(f"{board_values[0]} | {board_values[1]} | {board_values[2]}")
     print("---------")
@@ -16,35 +26,41 @@ def game_board():
     print("---------")
     print(f"{board_values[6]} | {board_values[7]} | {board_values[8]}")
 
-def choose_playing_position():
+# PLAYER CHOOSE X OR O
+def choose_xo():
     global player1
     global player2
-    answer = input("Player 1 -- Would you like to be X or O? : ").upper()
+    global current_player
+    acceptable_choices = ['X', 'O']
+    choice = 'INVALID'
 
-    while answer not in ['X', 'O']:
-        print("Sorry, not a valid choice \n")
-        answer = input("Player 1 -- Would you like to be X or O? : ").upper()
+    while choice not in acceptable_choices:
+        choice = input("Player 1 -- Would you like to be X or O? : ").upper()
 
-    print('\n')
-    if answer == 'X':
-        player1 = 'X'
-        player2 = 'O'
-    else:
-        player1 = 'O'
-        player2 = 'X'
+        if choice not in acceptable_choices:
+            print("Sorry, not a valid choice! Try again.")
+
+    player1 = choice 
+    acceptable_choices.remove(choice)
+    player2 = acceptable_choices[0]
 
     print(f"Player 1, you are {player1}.")
     print(f"Player 2, you are {player2}.")
     print('\n')
     print("Player 1 goes first...")
-    game_board()
     print('\n')
+
+    if player1 == 'X':
+        current_player = player1
+    else:
+        current_player = player2
+    
+    board_display()
 
 
 
 
 def start_game():
-    game_board()
-    choose_playing_position()
+    game_start()
 
 start_game()
