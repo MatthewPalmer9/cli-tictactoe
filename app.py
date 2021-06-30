@@ -11,7 +11,7 @@ def game_board():
     print("---------")
     print(f"{board_values[3]} | {board_values[4]} | {board_values[5]}")
     print("---------")
-    print(f"{board_values[0]} | {board_values[1]} | {board_values[2]}")
+    print(f"{board_values[6]} | {board_values[7]} | {board_values[8]}")
 
 
 
