@@ -1,5 +1,7 @@
+import speech_recognition
+
 # INITIALIZE GAME BOARD #
-board_values = [
+board = [
     ' ', ' ', ' ',
     ' ', ' ', ' ',
     ' ', ' ', ' '
@@ -16,15 +18,16 @@ def game_start():
     print("Welcome to TicTacToe!")
     board_display()
     choose_xo()
+    placement_handler(current_player, make_choice())
 
 # GAME BOARD
 def board_display():
     print('\n')
-    print(f"{board_values[0]} | {board_values[1]} | {board_values[2]}")
+    print(f"{board[0]} | {board[1]} | {board[2]}")
     print("---------")
-    print(f"{board_values[3]} | {board_values[4]} | {board_values[5]}")
+    print(f"{board[3]} | {board[4]} | {board[5]}")
     print("---------")
-    print(f"{board_values[6]} | {board_values[7]} | {board_values[8]}")
+    print(f"{board[6]} | {board[7]} | {board[8]}")
 
 # PLAYER CHOOSE X OR O
 def choose_xo():
@@ -57,6 +60,57 @@ def choose_xo():
     
     board_display()
 
+# CHOICE LISTENER
+def choice_listener():
+    acceptable_answers = [
+        'play top left',
+        'play top middle',
+        'play top right',
+        'play middle left',
+        'play middle',
+        'play middle right',
+        'play bottom left',
+        'play bottom middle',
+        'play botom right'
+    ]
+    recognizer = speech_recognition.Recognizer()
+    with speech_recognition.Microphone() as source:
+            print("Please choose your position (ex. 'play middle', 'play top left', 'play middle right', 'play bottom middle'): ")
+            audio = recognizer.listen(source)
+            choice = recognizer.recognize_google(audio)
+            print(f"You said: {choice}")
+
+            if choice in acceptable_answers:
+                return acceptable_answers.index(choice)
+            else:
+                print("Sorry, invalid choice. Try again!")
+                choice_listener()
+
+# CHOICE MAKER
+def make_choice():
+    choice = 'WRONG'
+    acceptable_range = range(0,8)
+
+    while choice.isdigit() == False or choice not in acceptable_range:
+        choice_listener()
+
+
+def placement_handler(player, choice):
+    global current_player
+
+    board[choice-1] = player
+
+    board_display()
+    if current_player == 'X':
+        current_player = 'O'
+    else:
+        current_player = 'X'
+    
+    winner = winner_check()
+    if winner == 'X' or winner == 'O':
+        print(f"Congratulations, player {winner}! YOU WON! Game over.")
+    else:
+        placement_handler(current_player, make_choice())
 
 
 
