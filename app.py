@@ -1,6 +1,3 @@
-import speech_recognition
-
-# INITIALIZE GAME BOARD #
 board = [
     ' ', ' ', ' ',
     ' ', ' ', ' ',
@@ -24,12 +21,13 @@ def game_start():
 def board_display():
     print('\n')
     print(f"{board[0]} | {board[1]} | {board[2]}")
-    print("---------")
+    print('---------')
     print(f"{board[3]} | {board[4]} | {board[5]}")
-    print("---------")
+    print('---------')
     print(f"{board[6]} | {board[7]} | {board[8]}")
+    print('\n')
 
-# PLAYER CHOOSE X OR O
+# PLAYER CHOOSE X or O
 def choose_xo():
     global player1
     global player2
@@ -38,61 +36,57 @@ def choose_xo():
     choice = 'INVALID'
 
     while choice not in acceptable_choices:
-        choice = input("Player 1 -- Would you like to be X or O? : ").upper()
+        choice = input("Player 1, do you want to be X or O? (X/O) : ").upper()
 
         if choice not in acceptable_choices:
-            print("Sorry, not a valid choice! Try again.")
-
-    player1 = choice 
+            print("Sorry, that is and invalid choice!")
+        
+    player1 = choice
     acceptable_choices.remove(choice)
     player2 = acceptable_choices[0]
 
-    print(f"Player 1, you are {player1}.")
-    print(f"Player 2, you are {player2}.")
+    print(f"Player 1, you are {player1}!")
+    print(f"Player 2, you are {player2}!")
     print('\n')
-    print("Player 1 goes first...")
+    print("Please remember, X goes first! :)")
     print('\n')
 
     if player1 == 'X':
         current_player = player1
     else:
         current_player = player2
-    
+
     board_display()
 
-# CHOICE LISTENER
-def choice_listener():
-    acceptable_answers = [
-        'play top left',
-        'play top middle',
-        'play top right',
-        'play middle left',
-        'play middle',
-        'play middle right',
-        'play bottom left',
-        'play bottom middle',
-        'play botom right'
-    ]
-    recognizer = speech_recognition.Recognizer()
-    with speech_recognition.Microphone() as source:
-            print("Please choose your position (ex. 'play middle', 'play top left', 'play middle right', 'play bottom middle'): ")
-            audio = recognizer.listen(source)
-            choice = recognizer.recognize_google(audio)
-            print(f"You said: {choice}")
-
-            if choice in acceptable_answers:
-                return acceptable_answers.index(choice)
-            else:
-                print("Sorry, invalid choice. Try again!")
-                choice_listener()
 
 # CHOICE MAKER
 def make_choice():
     choice = 'WRONG'
-    acceptable_range = range(0,8)
+    acceptable_range = range(1,10)
+    within_range = False
 
-    while choice.isdigit() == False or choice not in acceptable_range:
-        choice_listener()
+    while choice.isdigit() == False or within_range == False:
+        choice = input(f"Player {current_player}, Please choose a number (1-9) : ")
+
+        # DIGIT CHECK
+        if choice.isdigit() == False or choice == '':
+            print("Sorry, that is not a digit!")
+            make_choice()
+
+        # RANGE CHECK
+        if choice.isdigit():
+            if int(choice) in acceptable_range :
+                within_range = True
+            else:
+                print("Sorry, you are out of acceptable range (0-10)")
+                within_range = False
+        
+        # POSITION CHECK
+        if board[int(choice)-1] != ' ':
+            print("Sorry, that spot is already filled! Please choose another.")
+            return make_choice()
+        
+    return int(choice)
 
 # WINNER CHECK
 def winner_check():
@@ -137,7 +131,6 @@ def winner_check():
 
 def placement_handler(player, choice):
     global current_player
-
     board[choice-1] = player
 
     board_display()
@@ -148,13 +141,24 @@ def placement_handler(player, choice):
     
     winner = winner_check()
     if winner == 'X' or winner == 'O':
-        print(f"Congratulations, player {winner}! YOU WON! Game over.")
+        print(f"Congratulations, Player {winner}! YOU WIN! Game over.")
+        play_again()
     else:
         placement_handler(current_player, make_choice())
 
+def play_again():
+    gameon = 'INVALID'
+    acceptable_choices = ['Y', 'N']
 
+    while gameon not in acceptable_choices:
+        gameon = input("Play again? (Y/N) : ").upper()
 
-def start_game():
-    game_start()
+    if gameon not in acceptable_choices:
+        print("Sorry, invalid response. Please choose Y or N...")
 
-start_game()
+    if gameon == 'Y':
+        game_start()
+    else:
+        print("Goodbye! Thanks for playing!")
+
+game_start()
