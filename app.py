@@ -94,6 +94,46 @@ def make_choice():
     while choice.isdigit() == False or choice not in acceptable_range:
         choice_listener()
 
+# WINNER CHECK
+def winner_check():
+    global winner
+
+    # PLAYER 1 WINNER CHECK
+    if board[0] == player1 and board [1] == player1 and board[2] == player1:
+        winner = player1
+    elif board[3] == player1 and board [4] == player1 and board[5] == player1:
+        winner = player1
+    elif board[6] == player1 and board [7] == player1 and board[8] == player1:
+        winner = player1
+    elif board[0] == player1 and board [4] == player1 and board[8] == player1:
+        winner = player1
+    elif board[6] == player1 and board [4] == player1 and board[2] == player1:
+        winner = player1
+    elif board[0] == player1 and board [3] == player1 and board[6] == player1:
+        winner = player1
+    elif board[1] == player1 and board [4] == player1 and board[7] == player1:
+        winner = player1
+    elif board[2] == player1 and board [5] == player1 and board[8] == player1:
+        winner = player1
+
+    if board[0] == player2 and board [1] == player2 and board[2] == player2:
+        winner = player2
+    elif board[3] == player2 and board [4] == player2 and board[5] == player2:
+        winner = player2
+    elif board[6] == player2 and board [7] == player2 and board[8] == player2:
+        winner = player2
+    elif board[0] == player2 and board [4] == player2 and board[8] == player2:
+        winner = player2
+    elif board[6] == player2 and board [4] == player2 and board[2] == player2:
+        winner = player2
+    elif board[0] == player2 and board [3] == player2 and board[6] == player2:
+        winner = player2
+    elif board[1] == player2 and board [4] == player2 and board[7] == player2:
+        winner = player2
+    elif board[2] == player2 and board [5] == player2 and board[8] == player2:
+        winner = player2
+    
+    return winner
 
 def placement_handler(player, choice):
     global current_player
